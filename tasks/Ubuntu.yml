@@ -1,0 +1,30 @@
+---
+# Will preserve whatever hostname is given in setup
+- name: Preserve given hostname
+  become: true
+  become_user: root
+  become_method: su
+  lineinfile:
+    dest: /etc/cloud/cloud.cfg
+    regexp: "^preserve_hostname:"
+    line: "preserve_hostname: true"
+
+## Alternatively, works if I want to use cloud-init
+# - name: Set Hostname
+#   become: true
+#   become_user: root
+#   become_method: su
+#   lineinfile:
+#     dest: /etc/cloud/cloud.cfg
+#     regexp: "{{ item.regexp }}"
+#     line: "{{ item.line }}"
+#     mode: 0644
+#     insertafter: "^preserve_hostname"
+#   with_items:
+#     - regexp: "^preserve_hostname:"
+#       line: "preserve_hostname: false"
+#     # added hostname to hosts
+#     - regexp: "^manage_etc_hosts"
+#       line: "manage_etc_hosts: true"
+#     - regexp: "^hostname:"
+#       line: "hostname: {{ hostname }}.{{ domain }}"
