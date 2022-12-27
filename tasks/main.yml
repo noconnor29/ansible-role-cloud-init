@@ -1,3 +1,28 @@
 ---
+- name: Install Python to FreeBSD
+  ansible.builtin.raw: pkg install -y python
+  become: true
+  register: result_freebsd_install_python
+  when: "'freebsd' in group_names"
+  changed_when: "'already installed' not in result_freebsd_install_python.stdout"
+
+- name: Install Python to OpenBSD
+  ansible.builtin.raw: pkg_add python%3.8
+  become: true
+  when: "'openbsd' in group_names"
+
+- name: Gather Facts
+  setup:
+
 - include_tasks: Ubuntu.yml
+  #  when: ansible_os_family == 'Debian'
   when: ansible_facts['distribution'] == "Ubuntu"
+
+- include_tasks: FreeBSD.yml
+  when: ansible_os_family == 'FreeBSD'
+
+- include_tasks: OpenBSD.yml
+  when: ansible_os_family == 'OpenBSD'
+
+- include_tasks: RedHat.yml
+  when: ansible_os_family == 'RedHat'
