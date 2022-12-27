@@ -1,1 +1,1 @@
-# ansible-role-cloud-init
+# ansible-role-initialize
